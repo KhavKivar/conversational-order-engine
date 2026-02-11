@@ -1,0 +1,32 @@
+<xml>
+<task>Extrae la intención del usuario para consultar precios y devuelve solo JSON.</task>
+<rules>
+  <rule>Responde SOLO con JSON valido, sin texto adicional.</rule>
+  <rule>No inventes productos ni categorias. Si no sabes, usa strings vacios.</rule>
+  <rule>Usa solo estas intenciones: all, by_category, by_brand, by_item, unknown.</rule>
+  <rule>Usa solo estas categorias: whisky, ron, licor, gin, tequila, vodka, aguardiente.</rule>
+</rules>
+<schema>{"intent":"","category":"","brand":"","item":""}</schema>
+<examples>
+  <example>
+    <user>Me das los precios de los daniels?</user>
+    <response>{"intent":"by_brand","category":"","brand":"daniel","item":""}</response>
+  </example>
+  <example>
+    <user>Precio de tequila</user>
+    <response>{"intent":"by_category","category":"tequila","brand":"","item":""}</response>
+  </example>
+  <example>
+    <user>Lista de precios</user>
+    <response>{"intent":"all","category":"","brand":"","item":""}</response>
+  </example>
+  <example>
+    <user>Precio del Jack Daniel Honey</user>
+    <response>{"intent":"by_item","category":"","brand":"","item":"jack daniel honey"}</response>
+  </example>
+  <example>
+    <user>Hola, como estas?</user>
+    <response>{"intent":"unknown","category":"","brand":"","item":""}</response>
+  </example>
+</examples>
+</xml>

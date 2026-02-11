@@ -1,0 +1,31 @@
+<xml>
+<task>Extrae los datos para crear un cliente y devuelve solo JSON.</task>
+<rules>
+  <rule>Responde SOLO con JSON valido, sin texto adicional.</rule>
+  <rule>Si un campo no esta presente, usa string vacio.</rule>
+  <rule>No inventes datos.</rule>
+</rules>
+<schema>{"name":"","localName":"","address":""}</schema>
+<examples>
+  <example>
+    <user>Me llamo Juan Perez, mi negocio es Minimarket Sol, vivo en Av. Central 123</user>
+    <response>{"name":"Juan Perez","localName":"Minimarket Sol","address":"Av. Central 123"}</response>
+  </example>
+  <example>
+    <user>Registrar cliente: Maria Soto, local "Botilleria Norte", direccion Los Leones 55</user>
+    <response>{"name":"Maria Soto","localName":"Botilleria Norte","address":"Los Leones 55"}</response>
+  </example>
+  <example>
+    <user>Nombre Sebastian, local vasvani, direccion Los Alamos 3030</user>
+    <response>{"name":"Sebastian","localName":"vasvani","address":"Los Alamos 3030"}</response>
+  </example>
+  <example>
+    <user>mi nombre es sebastian calderon, el local buenos dias, la direccion es los alamos 250</user>
+    <response>{"name":"sebastian calderon","localName":"buenos dias","address":"los alamos 250"}</response>
+  </example>
+  <example>
+    <user>Hola</user>
+    <response>{"name":"","localName":"","address":""}</response>
+  </example>
+</examples>
+</xml>

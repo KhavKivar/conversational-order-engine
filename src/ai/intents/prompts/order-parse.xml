@@ -1,0 +1,93 @@
+<xml>
+<task>Identifica a que productos se refiere el usuario segun la lista fija de productos y devuelve solo JSON con ids.</task>
+<rules>
+  <rule>Responde SOLO con JSON valido, sin texto adicional.</rule>
+  <rule>Devuelve SOLO ids de productos existentes en la lista disponible, haciendo match con el nombre del producto aunque el usuario escriba una parte.</rule>
+  <rule>Si el usuario menciona un producto exacto de la lista y una cantidad, responde en status "positive".</rule>
+  <rule>Incluye quantity si el usuario lo menciona; si no, usa 1.</rule>
+  <rule>Si faltan datos o hay ambiguedad, explica brevemente en message lo que falto o lo que no entendiste, con tono directo al cliente.</rule>
+  <rule>No inventes datos.</rule>
+  <rule>Agrega status con valores: "positive" si todo fue parseado, "medium" si fue parcial, "negative" si no se pudo.</rule>
+  <rule>Usa message vacio cuando status sea "positive".</rule>
+  <rule>Si status es "medium" o "negative", message debe indicar directo al cliente lo que falto o no se pudo, pidiendo aclaracion si aplica.</rule>
+  <rule>Si el usuario pide "caja" de un producto, usa box_size para definir la cantidad.</rule>
+  <rule>Si el usuario pide N cajas, la cantidad = N * box_size.</rule>
+</rules>
+<schema>{"items":[{"id":0,"quantity":0}],"message":"","status":""}</schema>
+<products>
+  <product id="1" name="Whisky Jack Daniel N°7 Lt con dosificador" box_size="12" />
+  <product id="2" name="Whisky Jack Daniel Manzana Lt con dosificador" box_size="12" />
+  <product id="3" name="Whisky Jack Daniel Honey Lt" box_size="12" />
+  <product id="4" name="Whisky Jack Daniel Fire Lt" box_size="12" />
+  <product id="5" name="Whisky Black Label Lt" box_size="12" />
+  <product id="6" name="Whisky Red Label Lt" box_size="12" />
+  <product id="7" name="Ballantine Finest Lt" box_size="12" />
+  <product id="8" name="Chivas Regal 12 años Lt" box_size="12" />
+  <product id="9" name="Whisky Old Par Lt" box_size="12" />
+  <product id="10" name="Whisky Royal Circle Lt" box_size="12" />
+  <product id="11" name="Whisky Royal Circle Honey Lt" box_size="12" />
+  <product id="12" name="Whisky Royal Circle 200ml x48 un Black" box_size="48" />
+  <product id="13" name="Royal Circle Whisky &amp; Cola 330ml x24" box_size="24" />
+  <product id="14" name="Ron Havana Club añejo Especial Lt" box_size="12" />
+  <product id="15" name="Havana Club Reserva Lt" box_size="12" />
+  <product id="16" name="Havana Club 7 años" box_size="12" />
+  <product id="17" name="Havana Club 3 años Lt" box_size="12" />
+  <product id="18" name="Havana Especial 750ml" box_size="12" />
+  <product id="19" name="Havana Reserva 750ml" box_size="12" />
+  <product id="20" name="Ron Abuelo añejo Lt" box_size="12" />
+  <product id="21" name="Ron Viejo Caldas 3 años" box_size="12" />
+  <product id="22" name="Ron Viejo Caldas 5 años" box_size="12" />
+  <product id="23" name="Ron Viejo Caldas 8 años" box_size="12" />
+  <product id="24" name="Malibu de coco 750ml" box_size="12" />
+  <product id="25" name="Flor de Caña 4 años Lt" box_size="12" />
+  <product id="26" name="Flor de Caña 7 años Lt" box_size="12" />
+  <product id="27" name="Ron Barcelo añejo Lt" box_size="12" />
+  <product id="28" name="Ron Barcelo blanco Lt" box_size="12" />
+  <product id="29" name="Ron con Café Ojos de tigre 180ml x24" box_size="24" />
+  <product id="30" name="Licor Ramazzotti Rosato 700ml" box_size="12" />
+  <product id="31" name="Licor Ramazzotti Violet 700ml" box_size="12" />
+  <product id="32" name="Licor Amarula 750ml" box_size="12" />
+  <product id="33" name="Gin Beefeater Clásico blanco 750ml" box_size="12" />
+  <product id="34" name="Gin Beefeater Pink 750ml" box_size="12" />
+  <product id="35" name="Licor Jagermeister Lt 35°Alc" box_size="12" />
+  <product id="36" name="Aguardiente Antiqueño 750ml" box_size="12" />
+  <product id="37" name="Aguardiente Blanco del Valle Lt" box_size="12" />
+  <product id="38" name="Tequila Dona camila c/g Lt" box_size="12" />
+  <product id="39" name="Tequila Dona camila s/g Lt" box_size="12" />
+  <product id="40" name="Tequila Olmeca blanco 700ml" box_size="12" />
+  <product id="41" name="Tequila Olmeca Reposado 700ml" box_size="12" />
+  <product id="42" name="Tequila Chocolate 700ml" box_size="12" />
+  <product id="43" name="Tequila José Cuervo 750ml" box_size="12" />
+  <product id="44" name="Vodka Absolut Clásico 1 lt" box_size="12" />
+</products>
+<examples>
+  <example>
+    <user>Quiero 2 Jack Daniel N°7 y 1 Chivas 12 años</user>
+    <response>{"items":[{"id":1,"quantity":2},{"id":8,"quantity":1}],"message":"","status":"positive"}</response>
+  </example>
+  <example>
+    <user>Quiero 2 Ballantine Finest Lt</user>
+    <response>{"items":[{"id":7,"quantity":2}],"message":"","status":"positive"}</response>
+  </example>
+  <example>
+    <user>Quiero 1 caja de Jack Daniel N°7</user>
+    <response>{"items":[{"id":1,"quantity":12}],"message":"","status":"positive"}</response>
+  </example>
+  <example>
+    <user>buenas quiero una caja de jack daniels y una caja de royal circle 200ml</user>
+    <response>{"items":[{"id":1,"quantity":12},{"id":12,"quantity":48}],"message":"","status":"positive"}</response>
+  </example>
+  <example>
+    <user>Necesito 3 Malibu de coco. Que esten bien frias.</user>
+    <response>{"items":[{"id":24,"quantity":3}],"message":"Que esten bien frias","status":"positive"}</response>
+  </example>
+  <example>
+    <user>Una botella de pisco</user>
+    <response>{"items":[{"id":0,"quantity":0}],"message":"Lo siento, no tenemos pisco en la lista de productos. Si quieres, puedo ofrecerte otra opcion.","status":"negative"}</response>
+  </example>
+  <example>
+    <user>Quiero Jack Daniels</user>
+    <response>{"items":[{"id":0,"quantity":0}],"message":"Lo siento, no puedo entender. Me puedes aclarar si quieres un Jack Daniel N°7, Manzana, Honey o Fire.","status":"medium"}</response>
+  </example>
+</examples>
+</xml>
