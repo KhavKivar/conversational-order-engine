@@ -1,6 +1,5 @@
 import { GraphNode } from "@langchain/langgraph";
 import { State } from "../../state/schema.js";
-import { listOrders, OrderListItem } from "../../../../backend/src/services/orders.js";
 
 export const listAllOrders: GraphNode<typeof State> = async () => {
   const getAllOrders:OrderListItem[] = await listOrders(); 

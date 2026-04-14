@@ -1,17 +1,19 @@
 import { GraphNode } from "@langchain/langgraph";
 import { State } from "../../state/schema.js";
-import { listProducts, ProductListItem as Item } from "../../../../backend/src/services/products.js";
 import { toCapitalized } from "../utils/format.js";
+import { Product, ProductsResponse } from "../../../api/product.schema.js";
+import getProducts from "../../../api/get-products.js";
+
 
 export const listPriceNode: GraphNode<typeof State> = async () => {
-  const getAllPrices: Item[] = await listProducts();
+  const getAllPrices: ProductsResponse = await getProducts();
   let responseMessage = "Lista de productos:\n";
-
-  const typeOfProduct = [...new Set(getAllPrices.map((item) => item.type))];
+  const listOfProducts = getAllPrices.products;
+  const typeOfProduct = [...new Set(listOfProducts.map((item: Product) => item.type))];
 
   for (const type of typeOfProduct) {
-    responseMessage += `\n-- ${toCapitalized(type)} --\n`;
-    const productsOfType = getAllPrices.filter((item) => item.type === type);
+    responseMessage += `\n-- ${toCapitalized(type as string)} --\n`;
+    const productsOfType = listOfProducts.filter((item: Product) => item.type === type);
     for (const product of productsOfType) {
       responseMessage += `${product.name}, precio: $ ${product.sellPriceClient}\n`;
     }

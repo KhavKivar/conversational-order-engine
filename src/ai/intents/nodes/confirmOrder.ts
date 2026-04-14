@@ -1,8 +1,7 @@
 import { GraphNode, StateSnapshot } from "@langchain/langgraph";
 import { State } from "../../state/schema.js";
 import { graph } from "../../graph/strategy.js";
-import { createOrder, CreateOrderInput } from "../../../../backend/src/services/orders.js";
-import { check } from "drizzle-orm/gel-core";
+
 
 export const confirmOrder: GraphNode<typeof State> = async (state) => {
   //Get the order from the state
