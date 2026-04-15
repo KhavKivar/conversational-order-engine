@@ -3,6 +3,11 @@ import { GraphNode } from "@langchain/langgraph";
 import { State } from "../../state/schema.js";
 import { ai } from "../../providers/gemini.js";
 import { toMessageText } from "../../utils/message.js";
+import { Client } from "../../../api/client/client.schema.js";
+import { Product } from "../../../api/products/product.schema.js";
+import { CreateOrderInput } from "../../../api/orders/order.schema.js";
+import getClientByPhoneId from "../../../api/client/get-client-by-phone-id.js";
+import getProducts from "../../../api/products/get-products.js";
 
 const systemInstructionOrder = readFileSync(
   new URL("../prompts/order-parse.xml", import.meta.url),
@@ -36,7 +41,7 @@ export const makeOrderNode: GraphNode<typeof State> = async (state) => {
   }
 
   console.log(`Checking client for sender: ${sender}`);
-  const clientExist: OptionalClient = await getClientByPhoneId(sender);
+  const clientExist: Client | null = await getClientByPhoneId(sender);
   if (!clientExist) {
     return {
       messages: [
@@ -78,9 +83,8 @@ export const makeOrderNode: GraphNode<typeof State> = async (state) => {
     return incompleteHandling;
   }
 
-
-  const getAllProduct: ProductListItem[] = await listProducts();
-  const client: OptionalClient = await getClientByPhoneId(sender);
+  const getAllProduct: Product[] = (await getProducts()).products;
+  const client: Client | null = await getClientByPhoneId(sender);
   if (!client) {
     return {
       messages: [
@@ -131,7 +135,7 @@ export const makeOrderNode: GraphNode<typeof State> = async (state) => {
       {
         role: "ai",
         content: createMessage,
-        additional_kwargs: { order:  orderCreateDto }
+        additional_kwargs: { order: orderCreateDto },
       },
     ],
   };

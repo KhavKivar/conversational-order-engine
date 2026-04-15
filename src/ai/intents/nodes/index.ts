@@ -5,3 +5,5 @@ export { registerClientNode } from "./registerClientNode.js";
 export { confirmOrder } from "./confirmOrder.js";
 export { cancelOrder } from "./cancelOrder.js";
 export { listAllOrders } from "./listAllOrders.js";
+export { getProductPriceNode } from "./getProductPriceNode.js";
+export { botCapabilitiesNode } from "./botCapabilitiesNode.js";

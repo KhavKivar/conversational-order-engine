@@ -5,7 +5,7 @@ async function debugGraph() {
   console.log("--- Starting AI Graph Test ---");
 
   // Mock data to simulate a WhatsApp message
-  const testMessage = "listame todos los precios";
+  const testMessage = "quiero registrarme como un nuevo cliente";
   const testSender = "user123";
   const testPhone = "123456789";
 

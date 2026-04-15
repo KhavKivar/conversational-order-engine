@@ -9,6 +9,8 @@ import {
   makeOrderNode,
   registerClientNode,
   userIntentNode,
+  getProductPriceNode,
+  botCapabilitiesNode,
   confirmOrder,
   cancelOrder,
 } from "../intents/classifier.js";
@@ -23,6 +25,12 @@ const conditionalEdge = (state: { messages: Array<{ content?: unknown }> }) => {
 
   if (intent === "list_prices") {
     return "list_prices";
+  }
+  if (intent === "get_product_price") {
+    return "get_product_price";
+  }
+  if (intent === "bot_capabilities") {
+    return "bot_capabilities";
   }
   if (intent === "list_orders") {
     return "list_orders";
@@ -56,6 +64,8 @@ export const graph = new StateGraph(State)
   .addEdge(START, "user_intent")
   .addConditionalEdges("user_intent", conditionalEdge, {
     list_prices: "list_prices",
+    get_product_price: "get_product_price",
+    bot_capabilities: "bot_capabilities",
     list_orders: "list_orders",
     register_client: "register_client",
     place_order: "place_order",
@@ -63,6 +73,10 @@ export const graph = new StateGraph(State)
     cancel_order: "cancel_order",
     end: END,
   })
+  .addNode("bot_capabilities", botCapabilitiesNode)
+  .addEdge("bot_capabilities", END)
+  .addNode("get_product_price", getProductPriceNode)
+  .addEdge("get_product_price", END)
   .addEdge("list_prices", END)
   .addEdge("list_orders", END)
   .addEdge("place_order", END)

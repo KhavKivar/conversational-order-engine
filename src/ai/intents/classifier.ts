@@ -6,4 +6,6 @@ export {
   makeOrderNode,
   registerClientNode,
   userIntentNode,
+  getProductPriceNode,
+  botCapabilitiesNode,
 } from "./nodes/index.js";

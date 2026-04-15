@@ -5,6 +5,8 @@ export enum UserIntentType {
   REGISTER_CLIENT = "register_client",
   CONFIRM_ORDER = "confirm_order",
   CANCEL_ORDER = "cancel_order",
+  GET_PRODUCT_PRICE = "get_product_price",
+  BOT_CAPABILITIES = "bot_capabilities",
   NOT_RELATED = "not_related",
 }
 

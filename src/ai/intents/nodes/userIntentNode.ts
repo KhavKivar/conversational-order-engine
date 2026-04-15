@@ -11,7 +11,7 @@ const systemInstructionUserIntent = readFileSync(
 );
 
 export const userIntentNode: GraphNode<typeof State> = async (state) => {
-  const messages = state.messages;
+  const { messages, activeIntent } = state;
   if (messages.length === 0) {
     throw new Error("No messages found in state");
   }
@@ -30,6 +30,12 @@ export const userIntentNode: GraphNode<typeof State> = async (state) => {
   switch (intent) {
     case "list_prices":
       intentType = UserIntentType.LIST_PRICES;
+      break;
+    case "get_product_price":
+      intentType = UserIntentType.GET_PRODUCT_PRICE;
+      break;
+    case "bot_capabilities":
+      intentType = UserIntentType.BOT_CAPABILITIES;
       break;
     case "place_order":
       intentType = UserIntentType.PLACE_ORDER;
@@ -50,5 +56,22 @@ export const userIntentNode: GraphNode<typeof State> = async (state) => {
       intentType = UserIntentType.NOT_RELATED;
   }
 
-  return { messages: [{ role: "ai", content: intentType }] };
+  // Backup: si no reconoció nada pero tenemos una intención activa, la usamos.
+  // Esto permite que el "si" después de una pregunta herede el contexto anterior.
+  const isPositiveResponse = userMessageText.toLowerCase() === "si" || userMessageText.toLowerCase() === "bueno" || userMessageText.toLowerCase() === "ok";
+  
+  if ((intentType === UserIntentType.NOT_RELATED || isPositiveResponse) && activeIntent) {
+    console.log("Manteniendo contexto activo:", activeIntent);
+    intentType = activeIntent as UserIntentType;
+  }
+
+  // Si después de todo sigue sin estar relacionado, devolvemos un mensaje amable en lugar del label
+  const finalResponse = intentType === UserIntentType.NOT_RELATED 
+    ? "Lo siento, no entendí bien qué necesitás. ¿Podrías ser más específico? (Ej: precios, registrarme, hacer pedido)" 
+    : intentType;
+
+  return { 
+    messages: [{ role: "ai", content: finalResponse }],
+    activeIntent: intentType // Mantenemos el intent en el estado por si la conversación sigue
+  };
 };

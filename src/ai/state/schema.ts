@@ -1,5 +1,9 @@
-import { StateSchema, MessagesValue } from "@langchain/langgraph";
+import { Annotation, MessagesAnnotation } from "@langchain/langgraph";
 
-export const State = new StateSchema({
-  messages: MessagesValue,
+export const State = Annotation.Root({
+  ...MessagesAnnotation.spec,
+  activeIntent: Annotation<string | null>({
+    reducer: (curr, update) => update === undefined ? curr : update,
+    default: () => null,
+  })
 });

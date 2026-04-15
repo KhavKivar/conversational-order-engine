@@ -1,16 +1,13 @@
 import { GraphNode, StateSnapshot } from "@langchain/langgraph";
 import { State } from "../../state/schema.js";
-import { graph } from "../../graph/strategy.js";
-
+import { CreateOrderInput } from "../../../api/orders/order.schema.js";
+import createOrder from "../../../api/orders/create-order.js";
 
 export const confirmOrder: GraphNode<typeof State> = async (state) => {
-  //Get the order from the state
-
   const messages = state.messages;
   const sender = messages[0]?.additional_kwargs?.sender as string | undefined;
-  const phoneNumber = messages[0]?.additional_kwargs?.phone as
-    | string
-    | undefined;
+  const phoneNumber = messages[0]?.additional_kwargs?.phone as string | undefined;
+
   if (!sender || !phoneNumber) {
     return {
       messages: [
@@ -23,7 +20,7 @@ export const confirmOrder: GraphNode<typeof State> = async (state) => {
   }
 
   const getOrder = await getOrderFromHistory(sender);
-  if(!getOrder){
+  if (!getOrder) {
     return {
       messages: [
         {
@@ -33,22 +30,22 @@ export const confirmOrder: GraphNode<typeof State> = async (state) => {
       ],
     };
   }
-  createOrder(getOrder);
-  
+
+  await createOrder(getOrder);
+
   return { messages: [{ role: "ai", content: "Pedido confirmado." }] };
 };
 
 const getOrderFromHistory = async (sender: string): Promise<CreateOrderInput | null> => {
   const config = { configurable: { thread_id: sender } };
 
-  //Get the history
+  const { graph } = await import("../../graph/strategy.js");
   const lastSnapshot: StateSnapshot = (
     await graph.getStateHistory(config).next()
   ).value;
   const lastSnapshotNodes = lastSnapshot.values.messages;
   console.log("Last snapshot nodes:", lastSnapshotNodes);
 
-  //Find the makeOrderNode, based of on the content "Me puedes confirmar el siguiente pedido?"
   const checkLastOrderNode = Array.isArray(lastSnapshotNodes)
     ? lastSnapshotNodes.find(
         (node) =>
@@ -63,8 +60,6 @@ const getOrderFromHistory = async (sender: string): Promise<CreateOrderInput | n
   console.log(checkLastOrderNode.additional_kwargs.order);
   console.log("Check last order node:", checkLastOrderNode);
 
-  //Create order
-  let order: CreateOrderInput = checkLastOrderNode.additional_kwargs.order;
-
+  const order: CreateOrderInput = checkLastOrderNode.additional_kwargs.order;
   return order;
 };
