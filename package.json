@@ -13,7 +13,7 @@
   "dependencies": {
     "@google/genai": "^1.40.0",
     "@langchain/langgraph": "^1.1.4",
-    "axios": "^1.15.0",
+    "axios": "^1.18.0",
     "baileys": "^7.0.0-rc.9",
     "dotenv": "^17.2.3",
     "qrcode-terminal": "^0.12.0"
