@@ -1,30 +1,35 @@
-# GraphOrder Engine
+# Conversational Order Engine
 
-An agentic orchestration engine built with **LangGraph** and **Gemini** designed to transform unstructured conversational data into validated, production-ready order payloads.
+An agentic orchestration engine built with LangGraph and Gemini. It transforms unstructured conversations into validated order actions and coordinates customer, catalog, and order APIs.
 
----
+## Highlights
 
-## 🚀 Overview
+- LangGraph orchestration with conditional state transitions
+- Schema-guided extraction and payload validation
+- Thread-scoped conversation memory
+- Intent nodes for pricing, registration, ordering, cancellation, and lookup
+- REST integrations isolated behind typed API modules
+- Vitest coverage for graph and schema behavior
 
-**GraphOrder Engine** is a state-aware AI layer that manages the lifecycle of a customer order. Unlike traditional linear chatbots, this project utilizes a **cyclic graph architecture** to handle the nuances of natural language, allowing the AI to loop back for missing information, validate data against strict schemas, and maintain context across multi-turn sessions.
+## Architecture
 
-### Key Technical Highlights:
+```text
+Incoming message -> intent classifier -> domain node -> API operation
+                         ^                    |
+                         |-- clarification ---|
+```
 
-- **Agentic Orchestration:** Built using **LangGraph** to manage complex state transitions and conditional logic.
-- **Schema-Guided Extraction:** Leverages LLM function calling and JSON schemas to ensure 100% data predictability.
-- **Stateful Persistence:** Implements checkpointers to maintain conversation "memory" per user thread.
-- **Resilient Validation:** A specialized node-based validation logic that identifies missing fields and generates targeted follow-up questions.
+Graph nodes live under `src/ai/intents/nodes`; external API clients are grouped under `src/api`.
 
----
+## Getting started
 
-## 🛠 Architecture & Flow
+Requirements: Node.js 20+ and a compatible order-management API.
 
-The engine operates on a directed graph to ensure data integrity:
+```bash
+npm install
+cp .env.example .env
+npm test
+npm start
+```
 
-1.  **Ingestion & Normalization:** Sanitizes raw input and prepares the state.
-2.  **Intent Extraction:** The LLM maps natural language to the internal `OrderModel`.
-3.  **Cyclic Validation:** \* If the payload is incomplete, the graph routes back to the user for specific missing fields.
-    - If the payload is valid, it proceeds to the persistence layer.
-4.  **Confirmation & Finalization:** Generates a human-readable summary and manages the transition from `draft` to `confirmed`.
-
----
+WhatsApp pairing state is written to `auth/` and is excluded from Git. Never commit model keys, API bearer tokens, or conversation logs.
